@@ -1,7 +1,7 @@
-package com.GrandCentral.restaurant_backend.security;
+package com.grandcentral.restaurant_backend.security;
 
-import com.GrandCentral.restaurant_backend.model.Usuario;
-import com.GrandCentral.restaurant_backend.repository.UsuarioRepository;
+import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.repository.UsuarioRepository;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 

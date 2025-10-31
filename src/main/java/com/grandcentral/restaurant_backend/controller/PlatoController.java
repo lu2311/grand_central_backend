@@ -1,8 +1,8 @@
-package com.GrandCentral.restaurant_backend.controller;
+package com.grandcentral.restaurant_backend.controller;
 
 
-import com.GrandCentral.restaurant_backend.model.Plato;
-import com.GrandCentral.restaurant_backend.service.PlatoService;
+import com.grandcentral.restaurant_backend.model.Plato;
+import com.grandcentral.restaurant_backend.service.PlatoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,10 @@
-package com.GrandCentral.restaurant_backend.service;
+package com.grandcentral.restaurant_backend.service;
 
 
-import com.GrandCentral.restaurant_backend.model.Reserva;
-import com.GrandCentral.restaurant_backend.model.Usuario;
-import com.GrandCentral.restaurant_backend.repository.ReservaRepository;
-import com.GrandCentral.restaurant_backend.repository.UsuarioRepository;
+import com.grandcentral.restaurant_backend.model.Reserva;
+import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.repository.ReservaRepository;
+import com.grandcentral.restaurant_backend.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

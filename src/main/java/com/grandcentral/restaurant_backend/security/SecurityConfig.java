@@ -1,4 +1,4 @@
-package com.GrandCentral.restaurant_backend.security;
+package com.grandcentral.restaurant_backend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

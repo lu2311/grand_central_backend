@@ -1,7 +1,7 @@
-package com.GrandCentral.restaurant_backend.controller;
+package com.grandcentral.restaurant_backend.controller;
 
-import com.GrandCentral.restaurant_backend.model.Votacion;
-import com.GrandCentral.restaurant_backend.service.VotacionService;
+import com.grandcentral.restaurant_backend.model.Votacion;
+import com.grandcentral.restaurant_backend.service.VotacionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

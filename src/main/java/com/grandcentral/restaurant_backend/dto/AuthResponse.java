@@ -1,4 +1,4 @@
-package com.GrandCentral.restaurant_backend.dto;
+package com.grandcentral.restaurant_backend.dto;
 
 public class AuthResponse {
     private String token;

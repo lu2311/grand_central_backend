@@ -1,4 +1,4 @@
-package com.GrandCentral.restaurant_backend.security;
+package com.grandcentral.restaurant_backend.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

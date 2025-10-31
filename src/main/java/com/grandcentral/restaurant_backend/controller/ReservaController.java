@@ -1,8 +1,8 @@
-package com.GrandCentral.restaurant_backend.controller;
+package com.grandcentral.restaurant_backend.controller;
 
-import com.GrandCentral.restaurant_backend.model.Reserva;
-import com.GrandCentral.restaurant_backend.model.Usuario;
-import com.GrandCentral.restaurant_backend.service.ReservaService;
+import com.grandcentral.restaurant_backend.model.Reserva;
+import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.service.ReservaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

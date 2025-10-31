@@ -1,6 +1,6 @@
-package com.GrandCentral.restaurant_backend.repository;
+package com.grandcentral.restaurant_backend.repository;
 
-import com.GrandCentral.restaurant_backend.model.Usuario;    
+import com.grandcentral.restaurant_backend.model.Usuario;    
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

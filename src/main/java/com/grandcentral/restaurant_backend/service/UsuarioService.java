@@ -1,8 +1,8 @@
-package com.GrandCentral.restaurant_backend.service;
+package com.grandcentral.restaurant_backend.service;
 
-import com.GrandCentral.restaurant_backend.model.Usuario;
-import com.GrandCentral.restaurant_backend.repository.UsuarioRepository;
-import com.GrandCentral.restaurant_backend.security.JwtService;
+import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.repository.UsuarioRepository;
+import com.grandcentral.restaurant_backend.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

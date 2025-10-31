@@ -1,7 +1,7 @@
-package com.GrandCentral.restaurant_backend.service;
+package com.grandcentral.restaurant_backend.service;
 
-import com.GrandCentral.restaurant_backend.model.MenuDelDia;
-import com.GrandCentral.restaurant_backend.repository.MenuDelDiaRepository;
+import com.grandcentral.restaurant_backend.model.MenuDelDia;
+import com.grandcentral.restaurant_backend.repository.MenuDelDiaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

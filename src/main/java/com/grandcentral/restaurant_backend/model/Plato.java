@@ -1,4 +1,4 @@
-package com.GrandCentral.restaurant_backend.model;
+package com.grandcentral.restaurant_backend.model;
 
 
 import jakarta.persistence.*;

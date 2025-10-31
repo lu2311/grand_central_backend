@@ -1,8 +1,8 @@
-package com.GrandCentral.restaurant_backend.controller;
+package com.grandcentral.restaurant_backend.controller;
 
-import com.GrandCentral.restaurant_backend.model.Usuario;
-import com.GrandCentral.restaurant_backend.security.JwtService;
-import com.GrandCentral.restaurant_backend.service.UsuarioService;
+import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.security.JwtService;
+import com.grandcentral.restaurant_backend.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
