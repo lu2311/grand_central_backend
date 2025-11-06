@@ -8,7 +8,7 @@ import com.grandcentral.restaurant_backend.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 
 @Service
@@ -22,16 +22,34 @@ public class ReservaService {
         this.usuarioRepo = usuarioRepo;
     }
 
-    public Reserva crear(Reserva reserva) {
-        Usuario usuario = usuarioRepo.findById(reserva.getUsuario().getId())
+    public Reserva crear(Reserva reserva, String correoUsuario) {
+        Usuario usuario = usuarioRepo.findByCorreo(correoUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado."));
 
-        // Validar que no tenga reserva activa
-        if (repo.findByUsuarioId(usuario.getId()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El usuario ya tiene una reserva activa.");
+        // Obtener hora actual
+        ZoneId zonaPeru = ZoneId.of("America/Lima");
+        LocalDateTime ahora = LocalDateTime.now(zonaPeru);
+        LocalTime limite = LocalTime.of(8, 0);
+
+        // Determinar fecha de reserva (día actual o siguiente)
+        LocalDate fechaReserva = ahora.toLocalTime().isBefore(limite)
+                ? ahora.toLocalDate()
+                : ahora.toLocalDate().plusDays(1);
+
+        // Validar si ya tiene una reserva para esa fecha
+        if (repo.findByUsuarioIdAndFechaReserva(usuario.getId(), fechaReserva).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya tienes una reserva para esa fecha.");
         }
 
-        reserva.setHoraReserva(LocalDateTime.now());
+        // Solo permitir reservas de plato a la carta (por ahora)
+        if (reserva.getPlato() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Debes seleccionar un plato para la reserva.");
+        }
+
+        reserva.setUsuario(usuario);
+        reserva.setFechaReserva(fechaReserva);
+        reserva.setHoraReserva(ahora);
+
         return repo.save(reserva);
     }
 
@@ -48,10 +66,17 @@ public class ReservaService {
         return repo.findByUsuario(usuario);
     }
 
-    public void eliminar(Long id) {
-        if (!repo.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada.");
+    public void eliminar(Long reservaId, String correoUsuario) {
+        Usuario usuario = usuarioRepo.findByCorreo(correoUsuario)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado."));
+
+        Reserva reserva = repo.findById(reservaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada."));
+
+        if (!reserva.getUsuario().getId().equals(usuario.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes eliminar una reserva que no te pertenece.");
         }
-        repo.deleteById(id);
+
+        repo.delete(reserva);
     }
 }
