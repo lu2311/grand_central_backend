@@ -2,6 +2,8 @@ package com.grandcentral.restaurant_backend.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "platos")
@@ -11,9 +13,12 @@ public class Plato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre del plato es obligatorio")
     @Column(nullable = false)
     private String nombre;
 
+    @NotBlank(message = "El precio es obligatorio")
+    @Min(value = 1, message = "El precio debe ser mayor que 0")
     @Column(nullable = false)
     private Double precio;
 
