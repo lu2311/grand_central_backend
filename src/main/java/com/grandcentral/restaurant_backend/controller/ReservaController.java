@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,14 +38,16 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<Reserva> crear(@Validated @RequestBody Reserva reserva) {
-        Reserva guardada = service.crear(reserva);
+    public ResponseEntity<Reserva> crear(@Validated @RequestBody Reserva reserva, Principal principal) {
+        String correoUsuario = principal.getName();
+        Reserva guardada = service.crear(reserva, correoUsuario);
         return ResponseEntity.created(URI.create("/api/reservas/" + guardada.getId())).body(guardada);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        service.eliminar(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id, Principal principal) {
+        String correoUsuario = principal.getName();
+        service.eliminar(id, correoUsuario);
         return ResponseEntity.noContent().build();
     }
 }
