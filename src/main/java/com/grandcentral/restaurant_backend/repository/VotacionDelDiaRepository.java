@@ -9,4 +9,3 @@ import java.util.Optional;
 public interface VotacionDelDiaRepository extends JpaRepository<VotacionDelDia, Long> {
     Optional<VotacionDelDia> findByFecha(LocalDate fecha);
 }
-
