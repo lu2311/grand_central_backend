@@ -76,7 +76,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         // Modificacion para Render
-        config.addAllowedOriginPattern("");
+        config.addAllowedOriginPattern("https://grand-central.onrender.com");
         config.addAllowedOriginPattern("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
