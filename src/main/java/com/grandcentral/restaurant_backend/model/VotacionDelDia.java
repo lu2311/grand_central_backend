@@ -2,38 +2,31 @@ package com.grandcentral.restaurant_backend.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "votaciones", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"usuario_id", "fecha_voto"})
-})
-public class Votacion {
+@Table(name = "votaciones_dia")
+public class VotacionDelDia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @Column(nullable = false, unique = true)
+    private LocalDate fecha = LocalDate.now();
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "menu_id")
-    private MenuDelDia menu;
+    @OneToMany(mappedBy = "votacionDelDia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OpcionVoto> opciones;
 
-    @Column(name = "fecha_voto", nullable = false)
-    private LocalDate fechaVoto = LocalDate.now();
-
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public LocalDate getFecha() { return fecha; }
+    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
 
-    public MenuDelDia getMenu() { return menu; }
-    public void setMenu(MenuDelDia menu) { this.menu = menu; }
-
-    public LocalDate getFechaVoto() { return fechaVoto; }
-    public void setFechaVoto(LocalDate fechaVoto) { this.fechaVoto = fechaVoto; }
+    public List<OpcionVoto> getOpciones() { return opciones; }
+    public void setOpciones(List<OpcionVoto> opciones) { this.opciones = opciones; }
 }
