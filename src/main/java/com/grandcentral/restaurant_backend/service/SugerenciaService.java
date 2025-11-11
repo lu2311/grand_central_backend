@@ -1,6 +1,5 @@
 package com.grandcentral.restaurant_backend.service;
 
-
 import com.grandcentral.restaurant_backend.model.Sugerencia;
 import com.grandcentral.restaurant_backend.model.Usuario;
 import com.grandcentral.restaurant_backend.repository.SugerenciaRepository;
@@ -22,9 +21,11 @@ public class SugerenciaService {
         this.usuarioRepo = usuarioRepo;
     }
 
-    public Sugerencia crear(Sugerencia sugerencia) {
-        Usuario usuario = usuarioRepo.findById(sugerencia.getUsuario().getId())
+    public Sugerencia crear(Sugerencia sugerencia, String correoUsuario) {
+        Usuario usuario = usuarioRepo.findByCorreo(correoUsuario)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado."));
+
+        sugerencia.setUsuario(usuario);
         sugerencia.setFecha(LocalDateTime.now());
         return repo.save(sugerencia);
     }
@@ -35,7 +36,7 @@ public class SugerenciaService {
 
     public Sugerencia buscarPorId(Long id) {
         return repo.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sugerencia no encontrada."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sugerencia no encontrada."));
     }
 
     public List<Sugerencia> listarPorUsuario(Usuario usuario) {

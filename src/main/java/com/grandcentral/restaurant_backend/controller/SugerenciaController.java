@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,8 +38,9 @@ public class SugerenciaController {
     }
 
     @PostMapping
-    public ResponseEntity<Sugerencia> crear(@Validated @RequestBody Sugerencia sugerencia) {
-        Sugerencia guardada = service.crear(sugerencia);
+    public ResponseEntity<Sugerencia> crear(@Validated @RequestBody Sugerencia sugerencia, Principal principal) {
+        String correoUsuario = principal.getName(); // obtiene el correo del JWT o sesión
+        Sugerencia guardada = service.crear(sugerencia, correoUsuario);
         return ResponseEntity.created(URI.create("/api/sugerencias/" + guardada.getId())).body(guardada);
     }
 
