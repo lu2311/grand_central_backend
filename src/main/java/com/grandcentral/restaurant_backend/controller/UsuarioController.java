@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -16,14 +17,16 @@ public class UsuarioController {
 
     private final UsuarioService service;
     private final PasswordEncoder passwordEncoder;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public UsuarioController(UsuarioService service, PasswordEncoder passwordEncoder) {
+    public UsuarioController(UsuarioService service, PasswordEncoder passwordEncoder, UsuarioService usuarioService) {
         this.service = service;
         this.passwordEncoder = passwordEncoder;
+        this.usuarioService = usuarioService;
     }
 
-    // ✅ 1. REGISTRO PÚBLICO (no requiere token JWT)
+    // REGISTRO PÚBLICO (no requiere token JWT)
     @PostMapping("/registro")
     public ResponseEntity<Usuario> registrar(@Validated @RequestBody Usuario usuario) {
         // ❌ elimina esta línea:
@@ -33,19 +36,19 @@ public class UsuarioController {
         return ResponseEntity.created(URI.create("/api/usuarios/" + guardado.getId())).body(guardado);
     }
 
-    // ✅ 2. LISTAR TODOS (solo para admin o autenticados)
+    // LISTAR TODOS (solo para admin o autenticados)
     @GetMapping
     public List<Usuario> listarTodos() {
         return service.listarTodos();
     }
 
-    // ✅ 3. OBTENER USUARIO POR ID (solo autenticados)
+    // OBTENER USUARIO POR ID (solo autenticados)
     @GetMapping("/{id}")
     public Usuario obtener(@PathVariable Long id) {
         return service.buscarPorId(id);
     }
 
-    // ✅ 4. ACTUALIZAR USUARIO (solo autenticados)
+    // ACTUALIZAR USUARIO (solo autenticados)
     @PutMapping("/{id}")
     public Usuario actualizar(@PathVariable Long id, @Validated @RequestBody Usuario usuario) {
         // Re-codifica la contraseña solo si viene en la solicitud
@@ -55,10 +58,17 @@ public class UsuarioController {
         return service.actualizar(id, usuario);
     }
 
-    // ✅ 5. ELIMINAR USUARIO (solo autenticados o admin)
+    // ELIMINAR USUARIO (solo autenticados o admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> obtenerPerfil(Principal principal) {
+        String correo = principal.getName();
+        Usuario usuario = usuarioService.buscarPorCorreo(correo);
+        return ResponseEntity.ok(usuario);
     }
 }
