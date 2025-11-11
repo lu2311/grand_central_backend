@@ -5,6 +5,7 @@ import com.grandcentral.restaurant_backend.service.MenuDelDiaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,40 +20,31 @@ public class MenuDelDiaController {
         this.service = service;
     }
 
+    // Listar todos los menús creados
     @GetMapping
     public List<MenuDelDia> listarTodos() {
         return service.listarTodos();
     }
 
-    @GetMapping("/{id}")
-    public MenuDelDia obtener(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    // Obtener el menú de una fecha específica
+    @GetMapping("/fecha/{fecha}")
+    public MenuDelDia obtenerPorFecha(@PathVariable String fecha) {
+        LocalDate fechaParseada = LocalDate.parse(fecha);
+        return service.buscarPorFecha(fechaParseada);
     }
 
-    @GetMapping("/buscar-tipo")
-    public List<MenuDelDia> buscarPorTipo(@RequestParam String tipo) {
-        return service.buscarPorTipo(tipo);
-    }
-
-    @GetMapping("/buscar-fecha")
-    public List<MenuDelDia> buscarPorFecha(@RequestParam String fecha) {
-        return service.buscarPorFecha(LocalDate.parse(fecha));
-    }
-
+    // Crear manualmente un menú (solo si no existe uno para esa fecha)
     @PostMapping
     public ResponseEntity<MenuDelDia> crear(@Validated @RequestBody MenuDelDia menu) {
         MenuDelDia guardado = service.crear(menu);
-        return ResponseEntity.created(URI.create("/api/menus/" + guardado.getId())).body(guardado);
+        return ResponseEntity.created(URI.create("/api/menus/fecha/" + guardado.getFecha())).body(guardado);
     }
 
-    @PutMapping("/{id}")
-    public MenuDelDia actualizar(@PathVariable Long id, @Validated @RequestBody MenuDelDia menu) {
-        return service.actualizar(id, menu);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        service.eliminar(id);
+    // Eliminar un menú por fecha
+    @DeleteMapping("/fecha/{fecha}")
+    public ResponseEntity<Void> eliminarPorFecha(@PathVariable String fecha) {
+        LocalDate fechaParseada = LocalDate.parse(fecha);
+        service.eliminarPorFecha(fechaParseada);
         return ResponseEntity.noContent().build();
     }
 }

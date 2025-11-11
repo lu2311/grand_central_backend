@@ -17,6 +17,9 @@ public class VotacionDelDia {
     @Column(nullable = false, unique = true)
     private LocalDate fecha = LocalDate.now();
 
+    @Column(nullable = false)
+    private String estado = "ABIERTA"; // ABIERTA | CERRADA
+
     @OneToMany(mappedBy = "votacionDelDia", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OpcionVoto> opciones;
@@ -26,6 +29,9 @@ public class VotacionDelDia {
 
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
     public List<OpcionVoto> getOpciones() { return opciones; }
     public void setOpciones(List<OpcionVoto> opciones) { this.opciones = opciones; }

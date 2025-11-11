@@ -1,8 +1,11 @@
 package com.grandcentral.restaurant_backend.service;
 
-
+import com.grandcentral.restaurant_backend.model.MenuDelDia;
+import com.grandcentral.restaurant_backend.model.Plato;
 import com.grandcentral.restaurant_backend.model.Reserva;
 import com.grandcentral.restaurant_backend.model.Usuario;
+import com.grandcentral.restaurant_backend.repository.MenuDelDiaRepository;
+import com.grandcentral.restaurant_backend.repository.PlatoRepository;
 import com.grandcentral.restaurant_backend.repository.ReservaRepository;
 import com.grandcentral.restaurant_backend.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
@@ -16,10 +19,14 @@ public class ReservaService {
 
     private final ReservaRepository repo;
     private final UsuarioRepository usuarioRepo;
+    private final PlatoRepository platoRepo;
+    private final MenuDelDiaRepository menuRepo;
 
-    public ReservaService(ReservaRepository repo, UsuarioRepository usuarioRepo) {
+    public ReservaService(ReservaRepository repo, UsuarioRepository usuarioRepo, PlatoRepository platoRepo, MenuDelDiaRepository menuRepo) {
         this.repo = repo;
         this.usuarioRepo = usuarioRepo;
+        this.platoRepo = platoRepo;
+        this.menuRepo = menuRepo;
     }
 
     public Reserva crear(Reserva reserva, String correoUsuario) {
@@ -41,9 +48,27 @@ public class ReservaService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya tienes una reserva para esa fecha.");
         }
 
-        // Solo permitir reservas de plato a la carta (por ahora)
-        if (reserva.getPlato() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Debes seleccionar un plato para la reserva.");
+        // Validar que el usuario haya elegido o un plato o un menú, pero no ambos
+        boolean tienePlato = reserva.getPlato() != null;
+        boolean tieneMenu = reserva.getMenu() != null;
+
+        if (tienePlato == tieneMenu) { // ambos true o ambos false
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Debes seleccionar solo un tipo de reserva: un plato o un menú del día.");
+        }
+
+        if (tienePlato) {
+            // Validar que el plato exista
+            Plato plato = platoRepo.findById(reserva.getPlato().getId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado."));
+            reserva.setPlato(plato);
+        }
+
+        if (tieneMenu) {
+            // Validar que el menú exista y sea el del día de la reserva
+            MenuDelDia menu = menuRepo.findById(reserva.getMenu().getId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Menú no encontrado."));
+            reserva.setMenu(menu);
         }
 
         reserva.setUsuario(usuario);
@@ -59,7 +84,7 @@ public class ReservaService {
 
     public Reserva buscarPorId(Long id) {
         return repo.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada."));
     }
 
     public List<Reserva> listarPorUsuario(Usuario usuario) {
@@ -74,7 +99,8 @@ public class ReservaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada."));
 
         if (!reserva.getUsuario().getId().equals(usuario.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes eliminar una reserva que no te pertenece.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "No puedes eliminar una reserva que no te pertenece.");
         }
 
         repo.delete(reserva);
