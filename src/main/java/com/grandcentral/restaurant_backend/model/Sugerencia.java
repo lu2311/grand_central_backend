@@ -3,6 +3,9 @@ package com.grandcentral.restaurant_backend.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "sugerencias")
 public class Sugerencia {
@@ -13,6 +16,7 @@ public class Sugerencia {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties({"sugerencias", "reservas", "password", "contrasenia", "enabled", "authorities", "username", "rol","accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
     private Usuario usuario;
 
     @Column(nullable = false, columnDefinition = "TEXT")
