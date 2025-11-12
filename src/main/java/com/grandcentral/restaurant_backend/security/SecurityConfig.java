@@ -14,17 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.http.HttpMethod;
-
 
 @Configuration
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter; // opcional si usas filtro JWT
 
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
@@ -37,24 +32,25 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-    .requestMatchers("/api/usuarios/registro").permitAll()
-    .requestMatchers(HttpMethod.GET, "/api/platos/**").permitAll()
-    .requestMatchers(HttpMethod.POST, "/api/platos/**").hasRole("ADMIN")
-    .requestMatchers(HttpMethod.PUT, "/api/platos/**").hasRole("ADMIN")
-    .requestMatchers(HttpMethod.DELETE, "/api/platos/**").hasRole("ADMIN")
-    .anyRequest().authenticated()
-)
+                        .requestMatchers("/api/auth/**").permitAll() // login público
+                        .requestMatchers("/api/usuarios/registro").permitAll() // registro público
+                        .requestMatchers("/api/platos").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 
+        // Registrar explicitamente el AuthenticationProvider en la configuración
         http.authenticationProvider(authenticationProvider());
 
+        // Si usas JwtAuthFilter, agrégalo antes del filtro de autenticación por
+        // username/password
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    // DaoAuthenticationProvider que usa tu CustomUserDetailsService y el
+    // PasswordEncoder
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -68,6 +64,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // Exponer AuthenticationManager — Spring lo construirá usando los providers
+    // definidos
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -77,6 +75,7 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        // Modificacion para Render
         config.addAllowedOriginPattern("https://grand-central.onrender.com");
         config.addAllowedOriginPattern("http://localhost:3000");
         config.addAllowedHeader("*");
@@ -85,16 +84,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-    }
-
-    @Bean
-    public WebMvcConfigurer webConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/uploads/**")
-                        .addResourceLocations("file:uploads/");
-            }
-        };
     }
 }

@@ -17,31 +17,28 @@ public class Plato {
     @Column(nullable = false)
     private String nombre;
 
+    @NotBlank(message = "El precio es obligatorio")
     @Min(value = 1, message = "El precio debe ser mayor que 0")
     @Column(nullable = false)
     private Double precio;
 
-    // NUEVO: campo imagen
-    private String imagen;
-
     public Plato() {}
 
-    public Plato(String nombre, Double precio, String imagen) {
+    public Plato(String nombre, Double precio) {
         this.nombre = nombre;
         this.precio = precio;
-        this.imagen = imagen;
     }
 
     // Getters y Setters
     public Long getId() { return id; }
+
     public void setId(Long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
+
     public void setNombre(String nombre) { this.nombre = nombre; }
 
     public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
 
-    public String getImagen() { return imagen; }
-    public void setImagen(String imagen) { this.imagen = imagen; }
+    public void setPrecio(Double precio) { this.precio = precio; }
 }

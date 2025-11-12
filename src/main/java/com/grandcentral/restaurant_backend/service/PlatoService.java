@@ -30,12 +30,11 @@ public class PlatoService {
     }
 
     public Plato actualizar(Long id, Plato actualizado) {
-    Plato p = buscarPorId(id);
-    p.setNombre(actualizado.getNombre());
-    p.setPrecio(actualizado.getPrecio());
-    p.setImagen(actualizado.getImagen());
-    return repo.save(p);
-}
+        Plato p = buscarPorId(id);
+        p.setNombre(actualizado.getNombre());
+        p.setPrecio(actualizado.getPrecio());
+        return repo.save(p);
+    }
 
     public void eliminar(Long id) {
         if (!repo.existsById(id)) {
