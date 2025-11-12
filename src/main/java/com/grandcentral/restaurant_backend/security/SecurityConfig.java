@@ -47,9 +47,6 @@ public class SecurityConfig {
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(new org.springframework.web.filter.CorsFilter(corsConfigurationSource()), 
-            UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

@@ -45,7 +45,7 @@ public ResponseEntity<Plato> crear(
         @RequestPart("precio") Double precio,
         @RequestPart(value = "imagen", required = false) MultipartFile imagenFile
 ) throws IOException {
-
+    System.out.println("📩 Llego al endpoint /api/platos (POST)");
     String imagenPath = null;
     if (imagenFile != null && !imagenFile.isEmpty()) {
         String fileName = System.currentTimeMillis() + "_" + imagenFile.getOriginalFilename();
