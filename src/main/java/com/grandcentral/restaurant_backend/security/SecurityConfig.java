@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() 
                         .requestMatchers("/api/usuarios/registro").permitAll() 
-                        .requestMatchers("/api/platos").permitAll()
+                        .requestMatchers("/api/platos/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
