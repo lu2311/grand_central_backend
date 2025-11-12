@@ -64,17 +64,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 // 🔹 Extraer roles desde el JWT
                 Claims claims = jwtService.extractAllClaims(jwt);
-List<Map<String, String>> roles = (List<Map<String, String>>) claims.get("rol");
+                Object roles = claims.get("rol");
+                List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-if (roles != null) {
-    for (Map<String, String> role : roles) {
-        String authority = role.get("authority");
-        if (authority != null) {
-            authorities.add(new SimpleGrantedAuthority(authority));
-        }
-    }
-}
+                if (roles instanceof Collection<?>) {
+                    for (Object role : (Collection<?>) roles) {
+                        if (role instanceof Map<?, ?> map && map.get("authority") != null) {
+                            authorities.add(new SimpleGrantedAuthority(map.get("authority").toString()));
+                        }
+                    }
+                }
 
                 // Autenticación con roles
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
