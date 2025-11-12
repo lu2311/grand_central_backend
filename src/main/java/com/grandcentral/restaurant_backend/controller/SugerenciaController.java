@@ -30,6 +30,7 @@ public class SugerenciaController {
         return service.buscarPorId(id);
     }
 
+    
     @GetMapping("/usuario/{usuarioId}")
     public List<Sugerencia> listarPorUsuario(@PathVariable Long usuarioId) {
         Usuario usuario = new Usuario();

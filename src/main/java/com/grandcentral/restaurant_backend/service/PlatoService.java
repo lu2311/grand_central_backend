@@ -26,13 +26,16 @@ public class PlatoService {
 
     public Plato buscarPorId(Long id) {
         return repo.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plato no encontrado."));
     }
 
     public Plato actualizar(Long id, Plato actualizado) {
         Plato p = buscarPorId(id);
         p.setNombre(actualizado.getNombre());
         p.setPrecio(actualizado.getPrecio());
+        if (actualizado.getImagen() != null) {
+            p.setImagen(actualizado.getImagen());
+        }
         return repo.save(p);
     }
 
