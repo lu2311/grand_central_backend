@@ -33,6 +33,7 @@ public class PlatoService {
         Plato p = buscarPorId(id);
         p.setNombre(actualizado.getNombre());
         p.setPrecio(actualizado.getPrecio());
+        p.setImagen(actualizado.getImagen());
         return repo.save(p);
     }
 
