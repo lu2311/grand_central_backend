@@ -17,6 +17,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.http.HttpMethod;
 
 
 @Configuration
@@ -36,10 +37,14 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() 
-                        .requestMatchers("/api/usuarios/registro").permitAll() 
-                        .requestMatchers("/api/platos/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/auth/**").permitAll()
+    .requestMatchers("/api/usuarios/registro").permitAll()
+    .requestMatchers(HttpMethod.GET, "/api/platos/**").permitAll()
+    .requestMatchers(HttpMethod.POST, "/api/platos/**").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.PUT, "/api/platos/**").hasRole("ADMIN")
+    .requestMatchers(HttpMethod.DELETE, "/api/platos/**").hasRole("ADMIN")
+    .anyRequest().authenticated()
+)
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 

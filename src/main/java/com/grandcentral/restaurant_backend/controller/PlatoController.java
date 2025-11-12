@@ -38,7 +38,7 @@ public class PlatoController {
         return service.buscarPorNombre(nombre);
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
 @PostMapping(consumes = {"multipart/form-data"})
 public ResponseEntity<Plato> crear(
         @RequestPart("nombre") String nombre,
@@ -61,7 +61,7 @@ public ResponseEntity<Plato> crear(
 }
 
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
 @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
 public Plato actualizar(
         @PathVariable Long id,
@@ -89,7 +89,7 @@ public Plato actualizar(
     return service.crear(existente);
 }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
