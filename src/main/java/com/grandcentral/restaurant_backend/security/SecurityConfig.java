@@ -35,6 +35,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // login público
                         .requestMatchers("/api/usuarios/registro").permitAll() // registro público
                         .requestMatchers("/api/platos").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
