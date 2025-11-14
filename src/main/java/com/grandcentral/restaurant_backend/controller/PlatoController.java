@@ -3,6 +3,7 @@ package com.grandcentral.restaurant_backend.controller;
 
 import com.grandcentral.restaurant_backend.model.Plato;
 import com.grandcentral.restaurant_backend.service.PlatoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +38,7 @@ public class PlatoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Plato> crear(@Validated @RequestBody Plato plato) {
+    public ResponseEntity<Plato> crear(@Valid @RequestBody Plato plato) {
         Plato guardado = service.crear(plato);
         return ResponseEntity.created(URI.create("/api/platos/" + guardado.getId())).body(guardado);
     }
