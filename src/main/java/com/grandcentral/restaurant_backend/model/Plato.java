@@ -2,6 +2,7 @@ package com.grandcentral.restaurant_backend.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
@@ -18,6 +19,7 @@ public class Plato {
     private String nombre;
 
     @Min(value = 1, message = "El precio debe ser mayor que 0")
+    @Max(value = 30, message = "El precio no puede exceder 30")
     @Column(nullable = false)
     private Double precio;
 
