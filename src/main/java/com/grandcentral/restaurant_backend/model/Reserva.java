@@ -27,7 +27,7 @@ public class Reserva {
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "menu_id")
-    @JsonIgnoreProperties({"entradas", "fondos", "precio", "generadoAutomaticamente", "fecha"})
+    @JsonIgnoreProperties({"entradas", "fondos", "generadoAutomaticamente", "fecha"})
     private MenuDelDia menu;
 
     @Column(name = "entrada_elegida")

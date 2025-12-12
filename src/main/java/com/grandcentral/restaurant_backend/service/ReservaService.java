@@ -118,6 +118,14 @@ public class ReservaService {
                     "No puedes eliminar una reserva que no te pertenece.");
         }
 
+        LocalDateTime horaReserva = reserva.getHoraReserva();
+        LocalTime limiteHora = LocalTime.of(6, 0);
+
+        if (horaReserva.toLocalTime().isAfter(limiteHora)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "No puedes eliminar una reserva después de las 6 AM.");
+        }
+
         repo.delete(reserva);
     }
 }
